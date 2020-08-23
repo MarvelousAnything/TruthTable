@@ -1,38 +1,24 @@
 from inspect import getfullargspec
 
 
-def num_combos(n: int, r: int) -> int:
+def find_all_logic_combos(n: int) -> list:
     """
-    permutation formula
+    Takes a integer "n" and generates a list
+    of all possible combinations of 0 and 1 with length "n"
 
-    :param int n:
-    :param int r:
-    :return int:
+    :param int n: length of combinations
+    :return: list of all possible combinations of 0 and 1 with specified length n
     """
-    return n ** r
-
-
-def find_all_logic_combos(a: int) -> list:
-    """
-    Takes a integer "a" and generates a list
-    of all possible combinations of 0 and 1 with length "a"
-
-    :param int a: length of combinations
-    :return: list of all possible combinations of 0 and 1 with specified length a
-    """
-    b = int(a / 2)
-    c = []
     out = []
-    while b >= 1:
-        for i in range(0, int(a / 2) if (b - 1) != 0 else a, (b - 1) if (b - 1) != 0 else b):
-            c.extend([int(char) for char in (str(i % 2) * b)])
-        if len(c) < a:
-            c.extend([int(char) for char in (str(c[len(c) - (b + 1)]) * b)])
-        b /= 2
-        b = int(b)
-        out.append(c)
-        c = []
-    return list(zip(*out))  # Transpose out matrix
+    if n > 0:
+        for v in range(1 << n):
+            temp = []
+            for i in range(n - 1, -1, -1):
+                temp.append((v >> i) & 1)
+            out.append(temp)
+        return out
+    else:
+        return [[]]
 
 
 def truth_table(func):
@@ -45,7 +31,7 @@ def truth_table(func):
     """
     args = getfullargspec(func).args  # Gets the arguments from input function
     num_in = len(args)  # Gets the number of parameters from input function
-    ins = find_all_logic_combos(num_combos(2, num_in))  # Gets all possible binary inputs for input func
+    ins = find_all_logic_combos(num_in)  # Gets all possible binary inputs for input func
     table_list = list(zip(ins, [(func(*x)) for x in ins]))
     return table_list, args
 
