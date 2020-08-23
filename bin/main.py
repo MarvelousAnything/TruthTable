@@ -1,5 +1,4 @@
-import inspect
-import sys
+from inspect import getfullargspec
 
 
 def num_combos(n: int, r: int) -> int:
@@ -44,7 +43,7 @@ def truth_table(func):
     :param func:
     :return list table_list:
     """
-    args = inspect.getfullargspec(func).args  # Gets the arguments from input function
+    args = getfullargspec(func).args  # Gets the arguments from input function
     num_in = len(args)  # Gets the number of parameters from input function
     ins = find_all_logic_combos(num_combos(2, num_in))  # Gets all possible binary inputs for input func
     table_list = list(zip(ins, [(func(*x)) for x in ins]))
